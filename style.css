@@ -1,0 +1,2330 @@
+/* ==========================================================================
+   WEBSITE PORTOFOLIO - STYLE UTAMA
+   Dibuat khusus dengan gaya Glassmorphism, Neon, dan Modern UI
+   ========================================================================== */
+
+/* --- 1. IMPORT FONT DARI GOOGLE FONTS --- */
+/* Bebas Neue untuk judul besar, Syne untuk teks bacaan, DM Mono untuk label/angka */
+/* Kita ganti Syne dengan Inter atau Outfit yang lebih aman */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=DM+Mono:wght@300;400;500&display=swap');
+
+/* --- 2. VARIABEL WARNA & TEMA (DEFAULT: MODE GELAP) --- */
+:root {
+  --bg-primary: #080808;
+  --bg-secondary: #111111;
+  --bg-card: rgba(22, 22, 22, 0.4); /* Background kartu semi-transparan */
+  
+  --text-primary: #f0f0f0;
+  --text-secondary: #aaaaaa;
+  --text-muted: #666666;
+  
+  --neon-cyan: #00ffe0;
+  --neon-pink: #ff2d78;
+  --neon-yellow: #ffe000;
+  
+  --border-subtle: rgba(255, 255, 255, 0.08); /* Garis batas halus */
+  --border-neon: rgba(0, 255, 224, 0.3);      /* Garis batas menyala */
+  
+  /* --- Pengaturan Background Gambar Pemandangan --- */
+  --bg-overlay: rgba(8, 8, 8, 0.88); /* Warna gelap penutup gambar (88% transparan) */
+  --nav-bg: rgba(12, 12, 15, 0.85);  /* Warna navbar transparan */
+  
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body: 'Syne', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+  
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Efek transisi mulus */
+  --glow-cyan: 0 0 20px rgba(0, 255, 224, 0.3);        /* Efek cahaya neon */
+  
+  --navbar-height: 80px;
+}
+
+
+/* --- 4. RESET DASAR --- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+button { cursor: pointer; border: none; background: none; }
+
+
+/* Tambahkan animasi ini di bawahnya */
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* --- 6. NAVIGASI (NAVBAR) --- */
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0; 
+  height: var(--navbar-height);
+  background: var(--nav-bg);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); /* Efek Kaca Buram */
+  border-bottom: 1px solid var(--border-subtle);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  z-index: 1000; display: flex; align-items: center; padding: 0 2rem;
+  transition: var(--transition);
+}
+.nav-container { width: 100%; max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+.nav-logo { font-family: var(--font-display); font-size: 1.8rem; letter-spacing: 2px; }
+.nav-logo span { color: var(--neon-cyan); }
+.nav-menu { display: flex; gap: 1rem; align-items: center; }
+.nav-link { font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; padding: 0.5rem 1rem; transition: var(--transition); }
+.nav-link:hover, .nav-link.active { color: var(--neon-cyan); }
+
+/* Tombol Mode Gelap / Terang */
+.theme-btn {
+  background: var(--bg-card); border: 1px solid var(--border-subtle); color: var(--text-primary);
+  width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  transition: var(--transition); margin-left: 1rem;
+}
+.theme-btn:hover { color: var(--neon-cyan); border-color: var(--neon-cyan); transform: translateY(-2px); }
+.theme-btn svg { width: 18px; height: 18px; }
+
+/* Menu Hamburger (Untuk Layar HP) */
+.nav-toggle { display: none; flex-direction: column; gap: 5px; width: 30px; height: 30px; padding: 2px; }
+.nav-toggle span { display: block; height: 2px; background: var(--text-primary); transition: var(--transition); }
+
+/* --- 7. BAGIAN UTAMA (HERO SECTION) --- */
+.main-content { padding-top: var(--navbar-height); }
+
+.hero {
+  display: grid; 
+  grid-template-columns: 1.2fr 0.8fr; 
+  align-items: center; 
+  gap: 2rem;
+  max-width: 1200px; 
+  margin: 0 auto;
+  /* Posisi ditarik ke atas agar tidak terlalu ke bawah (Optical Centering) */
+  padding: 40px 2rem 2rem 2rem; 
+}
+
+/* Tipografi Hero */
+/* ==========================================================================
+   EFEK TEKS HERO INTERAKTIF (DIAM = BIASA, HOVER = RGB BERGERAK)
+   ========================================================================== */
+
+/* 1. KONDISI DIAM (IDLE) */
+.hero-name {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6vw, 4.5rem); 
+  line-height: 0.95;
+  letter-spacing: 3px;
+  margin-bottom: 0.5rem;
+  
+  /* Warna default RAFFY */
+  color: var(--text-primary); 
+  
+  display: inline-block;
+  transition: transform 0.3s ease, filter 0.3s ease;
+  cursor: default;
+}
+
+/* Warna default NADJIB saat diam */
+.hero-name .highlight {
+  color: var(--neon-cyan);
+  transition: color 0.3s ease;
+}
+
+/* 2. KONDISI SAAT TERKENA MOUSE (HOVER) */
+.hero-name:hover {
+  transform: scale(1.05); /* Sedikit membesar */
+  filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.4)); /* Glow tipis netral */
+  
+  /* Mengaktifkan Background RGB Pelangi */
+  background: linear-gradient(90deg, #ff0000, #00ff00, #0000ff, #ff0000); /* Warna RGB berulang */
+  background-size: 300% auto;
+  
+  /* Memotong background agar berbentuk seperti teks */
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  
+  /* Menjalankan animasi warna RGB bergerak */
+  animation: rgbFlow 5s linear infinite;
+}
+
+/* Memastikan kata NADJIB ikut menjadi transparan agar background RGB induknya terlihat tembus */
+.hero-name:hover .highlight {
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* 3. ANIMASI WARNA BERGERAK */
+@keyframes rgbFlow {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 300% center;
+  }
+}
+
+
+.hero-role { font-family: var(--font-mono); font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 1rem; min-height: 1.8rem; }
+.typed-cursor { display: inline-block; width: 2px; height: 1.1em; background: var(--neon-cyan); margin-left: 2px; animation: cursorBlink 0.8s step-end infinite; }
+@keyframes cursorBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+.hero-bio { 
+  font-family: var(--font-body);
+  font-size: 0.95rem; 
+  color: var(--text-secondary); 
+  max-width: 480px; 
+  margin-bottom: 1.5rem; 
+  line-height: 1.6; /* Inter biasanya sudah cukup bagus di 1.6 */
+  letter-spacing: 0.01em; /* Membuat teks Inter terlihat lebih premium */
+}
+
+/* --- 8. IKON SOSIAL MEDIA --- */
+.social-links { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.social-icon {
+  width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+  background: var(--bg-card); border: 1px solid var(--border-subtle); color: var(--text-secondary);
+  transition: var(--transition);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); /* Efek Kaca */
+}
+.social-icon svg { width: 20px; height: 20px; transition: transform 0.3s ease; }
+.social-icon:hover {
+  color: var(--neon-cyan); border-color: var(--neon-cyan);
+  background: rgba(0, 255, 224, 0.05); box-shadow: var(--glow-cyan); transform: translateY(-5px);
+}
+.social-icon:hover svg { transform: scale(1.15); }
+
+/* --- 9. TOMBOL CALL-TO-ACTION --- */
+.hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; font-family: var(--font-mono); font-size: 0.8rem;
+  text-transform: uppercase; padding: 0.85rem 2rem; border-radius: 6px; transition: var(--transition);
+}
+.btn-primary { background: var(--neon-cyan); color: #000; font-weight: bold; }
+.btn-primary:hover { box-shadow: var(--glow-cyan); transform: translateY(-2px); background: #1afff0; }
+.btn-outline { border: 1px solid var(--border-subtle); color: var(--text-secondary); }
+.btn-outline:hover { border-color: var(--neon-cyan); color: var(--neon-cyan); transform: translateY(-2px); }
+
+/* --- 10. FOTO PROFIL BULAT --- */
+.hero-visual { 
+  display: flex; 
+  justify-content: center; 
+  position: relative; 
+  /* Hapus padding-top untuk menaikkan foto */
+  perspective: 1000px;
+}
+
+/* Pembungkus Foto dibuat Persegi Sama Sisi */
+.hero-photo-wrapper { 
+  position: relative; 
+  /* Ukuran diperbesar dari 250px menjadi 340px */
+  width: 340px;  
+  height: 340px; 
+  border-radius: 50%; /* Membentuk lingkaran sempurna */
+  margin: -1.5rem auto 0 auto; 
+  border: 2px solid var(--border-neon); /* Garis tepi neon */
+  box-shadow: var(--glow-cyan); /* Efek menyala */
+  z-index: 1;
+}
+
+/* Mengatur Penempatan Foto agar Wajah Tidak Terpotong */
+.hero-photo { 
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; 
+  border-radius: 50%; 
+  border: none;
+  /* Kunci anti kepotong: Mengarahkan fokus foto ke arah atas tengah wajah */
+  object-position: center 15%; 
+}
+
+/* Menghilangkan Sudut Neon Karena Fotonya Sekarang Bulat */
+.photo-corner { display: none; }
+
+/* --- Badge "Available for Hire" DIHAPUS --- */
+
+/* --- 11. RESPONSIVE DESIGN (UNTUK LAPTOP KECIL, TABLET & HP) --- */
+@media (max-width: 1024px) {
+  /* Ubah layout jadi 1 kolom, teks di atas, foto di bawah */
+  .hero { grid-template-columns: 1fr; padding-top: 60px; text-align: center; gap: 3rem; }
+  .hero-visual { order: -1; /* Pindahkan foto ke atas teks */ }
+  .social-links, .hero-actions, .hero-bio { justify-content: center; margin-left: auto; margin-right: auto; }
+}
+
+@media (max-width: 768px) {
+  /* Tampilkan tombol hamburger */
+  .nav-toggle { display: flex; }
+  
+  /* Sembunyikan menu ke atas, tampilkan saat di-klik */
+  .nav-menu {
+    position: fixed; top: var(--navbar-height); left: 0; right: 0; 
+    background: var(--nav-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    flex-direction: column; padding: 1.5rem; gap: 1rem; 
+    transform: translateY(-150%); opacity: 0; transition: var(--transition); border-bottom: 1px solid var(--border-subtle);
+  }
+  .nav-menu.open { transform: translateY(0); opacity: 1; }
+  .nav-link { font-size: 1rem; padding: 0.8rem; }
+  
+  /* Sesuaikan ukuran font nama agar tidak kebesaran di HP */
+  .hero-name { font-size: clamp(2.5rem, 12vw, 4rem); }
+}
+
+/* ==========================================================================
+   IKON MELAYANG (FLOATING ICONS) DI FOTO PROFIL
+   ========================================================================== */
+.floating-icon {
+  position: absolute;
+  width: 45px;
+  height: 45px;
+  background: rgba(22, 22, 22, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-neon);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--neon-cyan);
+  box-shadow: var(--glow-cyan);
+  z-index: 5;
+}
+
+.floating-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Pengaturan Posisi & Animasi Masing-Masing Ikon */
+.icon-1 { 
+  top: 15%; 
+  left: -20px; 
+  animation: floatIcon 4s ease-in-out infinite; 
+}
+.icon-2 { 
+  bottom: 15%; 
+  left: -5px; 
+  animation: floatIcon 5s ease-in-out infinite 1s; 
+}
+.icon-3 { 
+  top: 40%; 
+  right: -25px; 
+  animation: floatIcon 4.5s ease-in-out infinite 0.5s; 
+}
+
+/* Animasi Naik Turun */
+@keyframes floatIcon {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+
+
+/* ==========================================================================
+   ABOUT SECTION
+   ========================================================================== */
+.about-section {
+  padding: 8rem 5%;
+  background: linear-gradient(to bottom, transparent, rgba(10, 10, 10, 0.8));
+  position: relative;
+  z-index: 2;
+}
+
+.about-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  letter-spacing: 2px;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+}
+
+.text-glow {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 15px rgba(0, 255, 224, 0.5);
+}
+
+.about-text {
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  margin-bottom: 1.2rem;
+}
+
+.about-visual {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.glass-box {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  transform: rotate(-3deg);
+  transition: transform 0.4s ease;
+}
+
+.glass-box:hover {
+  transform: rotate(0deg) scale(1.02);
+  border-color: var(--neon-cyan);
+  box-shadow: 0 20px 40px rgba(0, 255, 224, 0.1);
+}
+
+.glass-code {
+  font-family: monospace;
+  color: #a0aec0;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.glass-code span {
+  color: var(--neon-pink);
+}
+
+/* ==========================================================================
+   CALL TO ACTION & FOOTER
+   ========================================================================== */
+.cta-section {
+  padding: 6rem 5% 8rem 5%; /* Padding bawah lebih besar untuk ruang marquee */
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.cta-title {
+  font-family: var(--font-display);
+  font-size: 3.5rem;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  line-height: 1.1;
+}
+
+.cta-desc {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  max-width: 500px;
+  margin: 0 auto 2.5rem auto;
+  line-height: 1.6;
+}
+
+.cta-btn {
+  /* Menggunakan style tombol yang sama dengan "Lihat Portofolio" */
+  display: inline-block;
+  padding: 1rem 2.5rem;
+  background: var(--neon-cyan);
+  color: #000;
+  font-weight: 600;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: var(--glow-cyan);
+}
+
+.cta-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 255, 224, 0.6);
+}
+
+/* ==========================================================================
+   ENHANCED FOOTER (FOOTER LENGKAP)
+   ========================================================================== */
+.main-footer {
+  border-top: 1px solid var(--border-subtle);
+  background: rgba(10, 10, 10, 0.6);
+  padding: 4rem 5% 1.5rem 5%;
+  /* Memberi margin bawah agar aman dan tidak tertutup pita berjalan marquee */
+  margin-bottom: 3.5rem; 
+  position: relative;
+  z-index: 2;
+}
+
+.footer-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  /* Membuat 3 kolom: kolom pertama lebih lebar */
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+.footer-logo {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  letter-spacing: 2px;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+.footer-desc {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-width: 350px;
+  font-size: 0.95rem;
+}
+
+.footer-heading {
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  margin-bottom: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.footer-links ul,
+.footer-social ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-links li,
+.footer-social li {
+  margin-bottom: 0.8rem;
+}
+
+.footer-links a,
+.footer-social a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.3s ease, transform 0.3s ease;
+  display: inline-block;
+  font-size: 0.95rem;
+}
+
+/* Efek Hover Keren untuk Link Footer */
+.footer-links a:hover,
+.footer-social a:hover {
+  color: var(--neon-cyan);
+  transform: translateX(5px); /* Teks sedikit bergeser ke kanan */
+}
+
+.footer-bottom {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.footer-bottom .heart {
+  color: var(--neon-pink);
+  animation: pulseHeart 1.5s infinite;
+  display: inline-block;
+}
+
+@keyframes pulseHeart {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+
+/* ==========================================================================
+   PORTFOLIO HERO SECTION (HEADER)
+   ========================================================================== */
+
+.portfolio-hero {
+  /* Memastikan semua isi di bagian atas ini berada di tengah */
+  text-align: center; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* Memberikan ruang napas di atas dan bawah */
+  padding: 10rem 5% 5rem 5%; 
+}
+
+.portfolio-hero .hero-bio {
+  font-family: var(--font-body), sans-serif;
+  font-size: 1.15rem; /* Ukuran teks sedikit diperbesar */
+  line-height: 1.8; /* Jarak antar baris agar lebih lega */
+  color: #a0aec0; /* Warna abu-abu terang yang elegan */
+  max-width: 650px;
+  margin: 1.5rem auto 0 auto;
+  text-align: center;
+}
+
+/* Mengecilkan ukuran khusus untuk judul halaman portofolio */
+.portfolio-title {
+  font-size: clamp(2rem, 5vw, 3.2rem) !important; 
+}
+
+/* ==========================================================================
+   PORTFOLIO GRID LAYOUT (PAS 1 LAYAR)
+   ========================================================================== */
+
+.portfolio-grid-section {
+  /* Jarak atas diatur manual agar aman dari navbar, bawahnya cukup ruang */
+  padding: 8rem 5% 4rem 5%; 
+  display: block; /* Hapus display: flex dan align-items: center sebelumnya */
+  min-height: 100vh;
+  background-color: #0a0a0a; 
+  position: relative;
+  z-index: 2;
+}
+
+/* Memastikan kontainer di dalamnya tetap mengambil lebar penuh */
+.portfolio-container {
+  width: 100%;
+}
+
+.showcase-title {
+  /* Jarak bawah judul dikurangi agar tidak membuang ruang */
+  margin-bottom: 2rem !important; 
+}
+
+.project-grid {
+  /* Pastikan tidak ada jarak ganda di atas grid */
+  margin-top: 0 !important; 
+}
+
+/* 1. Sistem Grid untuk menjejerkan kartu (Responsif) */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+/* 2. Desain Dasar Kartu Proyek */
+.project-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(0, 255, 224, 0.2); /* Garis batas neon redup */
+  border-radius: 16px;
+  overflow: hidden; /* Mengunci gambar agar sudutnya ikut melengkung */
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+/* Efek saat kartu di-hover (Terangkat & Menyala) */
+.project-card:hover {
+  transform: translateY(-10px);
+  border-color: var(--neon-cyan);
+  box-shadow: 0 15px 35px rgba(0, 255, 224, 0.15);
+}
+
+/* 3. Area Gambar Proyek */
+.project-image {
+  width: 100%;
+  /* Turunkan dari 220px/240px menjadi 180px agar kartu lebih ramping */
+  height: 180px !important; 
+  background-color: #1a1a1a;
+  overflow: hidden;
+}
+
+.project-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Gambar akan proporsional memenuhi area */
+  transition: transform 0.5s ease;
+}
+
+.project-card:hover .project-image img {
+  transform: scale(1.08); /* Efek zoom halus saat di-hover */
+}
+
+/* 4. Area Teks & Info Proyek */
+.project-info {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Mendorong tombol ke bawah */
+}
+
+.project-info h3 {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  color: #ffffff;
+  margin-bottom: 0.8rem;
+  letter-spacing: 1px;
+}
+
+.project-info p {
+  color: #a0aec0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  flex-grow: 1; /* Membuat tinggi teks seragam di semua kartu */
+}
+
+/* 5. Tag Teknologi (Pills) */
+.tech-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.tech-stack span {
+  font-size: 0.8rem;
+  color: var(--neon-cyan);
+  background: rgba(0, 255, 224, 0.1);
+  padding: 0.3rem 0.8rem;
+  border-radius: 50px;
+  font-weight: 500;
+}
+
+/* 6. Tombol "Lihat Detail" */
+.project-link {
+  text-align: center;
+  padding: 0.8rem;
+  border: 1px solid var(--neon-cyan);
+  color: var(--neon-cyan);
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  margin-top: auto;
+}
+
+.project-link:hover {
+  background: var(--neon-cyan);
+  color: #000000;
+  box-shadow: 0 0 15px rgba(0, 255, 224, 0.4);
+}
+
+
+/* ==========================================================================
+   CSS RESPONSIF TAMBAHAN (MASUKKAN KE DALAM BLOK @media ANDA)
+   ========================================================================== */
+
+/* Penyesuaian Responsif untuk HP */
+@media (max-width: 768px) {
+  .about-container { flex-direction: column; text-align: center; gap: 2rem; }
+  .section-title { font-size: 2.5rem; }
+  .cta-title { font-size: 2.5rem; }
+}
+
+/* ==========================================================================
+   CSS RESPONSIF UNTUK HP (MOBILE)
+   ========================================================================== */
+@media (max-width: 768px) {
+
+  /* Susun footer menjadi 1 kolom vertikal di HP */
+  .footer-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    text-align: center;
+  }
+  .footer-desc {
+    margin: 0 auto; /* Tengah di layar HP */
+  }
+  .footer-bottom {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  /* Tampilkan tombol hamburger di navigasi */
+  .nav-toggle { display: flex; }
+  
+  /* Sembunyikan menu ke atas, tampilkan saat di-klik */
+  .nav-menu {
+    position: fixed; top: var(--navbar-height); left: 0; right: 0; 
+    background: var(--nav-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    flex-direction: column; padding: 1.5rem; gap: 1rem; 
+    transform: translateY(-150%); opacity: 0; transition: var(--transition); border-bottom: 1px solid var(--border-subtle);
+  }
+  .nav-menu.open { transform: translateY(0); opacity: 1; }
+  .nav-link { font-size: 1rem; padding: 0.8rem; }
+  
+  /* Sesuaikan ukuran font nama agar tidak kebesaran di HP */
+  .hero-name { font-size: clamp(2.5rem, 12vw, 4rem); }
+
+  /* ==========================================
+     PERBAIKAN FOTO & IKON MELAYANG DI HP 
+     ==========================================
+  */
+
+  /* 1. Pindahkan foto profil ke atas teks nama */
+  .hero-visual { order: -1; }
+
+  /* 2. PERKECIL UKURAN PEMBUNGKUS FOTO agar muat di layar HP */
+  .hero-photo-wrapper { 
+    /* Ukuran diperkecil dari 340px menjadi 220px */
+    width: 220px;  
+    height: 220px; 
+    /* Sesuaikan margin agar tidak bertabrakan dengan nama di bawahnya */
+    margin: 1rem auto 0 auto; 
+  }
+
+  /* 3. PERKECIL UKURAN IKON MELAYANG */
+  .floating-icon {
+    /* Ukuran diperkecil dari 45px menjadi 30px */
+    width: 30px;
+    height: 30px;
+  }
+  
+  /* Perkecil SVG di dalam ikon */
+  .floating-icon svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* 4. ATUR ULANG POSISI IKON AGAR PAS DI SEKITAR LINGKARAN HP
+     Kita gunakan nilai positif agar ikon tetap melayang tapi tidak keluar batas layar.
+  */
+  .icon-1 { top: 10%; left: 5px; }  /* Ikon Kode */
+  .icon-2 { bottom: 10%; left: 15px; } /* Ikon Figma */
+  .icon-3 { top: 35%; right: 5px; } /* Ikon Bintang */
+}
+
+/* ==========================================================================
+   IKON MELAYANG (FLOATING ICONS) DI FOTO PROFIL
+   ========================================================================== */
+.floating-icon {
+  position: absolute;
+  width: 45px;
+  height: 45px;
+  background: var(--bg-card); /* Background redup kaca */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-subtle); /* Garis tepi redup */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary); /* Warna ikon abu-abu default */
+  z-index: 5;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Efek transisi halus */
+}
+
+.floating-icon svg {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s ease; /* Transisi untuk efek membesar */
+}
+
+/* EFEK SAAT TERKENA MOUSE (HOVER EFFECT) */
+.floating-icon:hover {
+  color: var(--neon-cyan); /* Ikon menyala */
+  border-color: var(--neon-cyan); /* Garis tepi menyala */
+  background: rgba(0, 255, 224, 0.05); /* Background sedikit kebiruan */
+  box-shadow: var(--glow-cyan); /* Bayangan neon muncul */
+  
+  /* Memberhentikan animasi naik-turun sejenak saat disentuh mouse */
+  animation-play-state: paused; 
+}
+
+/* SVG membesar saat kotak di-hover */
+.floating-icon:hover svg {
+  transform: scale(1.2); 
+}
+
+/* Pengaturan Posisi & Animasi Masing-Masing Ikon (Biarkan Tetap Sama) */
+.icon-1 { top: 15%; left: -20px; animation: floatIcon 4s ease-in-out infinite; }
+.icon-2 { bottom: 15%; left: -5px; animation: floatIcon 5s ease-in-out infinite 1s; }
+.icon-3 { top: 40%; right: -25px; animation: floatIcon 4.5s ease-in-out infinite 0.5s; }
+
+/* Animasi Naik Turun */
+@keyframes floatIcon {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+
+/* ==========================================================================
+   TECH MARQUEE (PITA BERJALAN)
+   ========================================================================== */
+.tech-marquee {
+  width: 100%;
+  overflow: hidden;
+  background: rgba(10, 10, 10, 0.4); 
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-top: 1px solid var(--border-subtle);
+  padding: 0.5rem 0; 
+  display: flex;
+  white-space: nowrap;
+  position: fixed; 
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+}
+
+.marquee-content {
+  display: flex;
+  gap: 3rem;
+  /* Sesuaikan waktu (20s) untuk mempercepat/memperlambat */
+  animation: scrollMarquee 20s linear infinite;
+}
+
+.marquee-content span {
+  font-family: var(--font-display); 
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  letter-spacing: 2px;
+}
+
+/* Warna titik pemisah */
+.marquee-content span.dot {
+  color: var(--neon-cyan);
+}
+
+/* Animasi Berjalan Berputar */
+@keyframes scrollMarquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); } 
+}
+
+
+
+/* Indikator Scroll Mouse */
+.scroll-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 3rem; /* Jarak dari tombol CTA */
+  opacity: 0.6;
+}
+
+.scroll-indicator .mouse {
+  width: 20px;
+  height: 32px;
+  border: 2px solid var(--text-secondary);
+  border-radius: 12px;
+  position: relative;
+}
+
+.scroll-indicator .wheel {
+  width: 4px;
+  height: 8px;
+  background: var(--neon-cyan);
+  border-radius: 2px;
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: scrollWheel 1.5s ease-in-out infinite;
+}
+
+.scroll-indicator .scroll-text {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--text-secondary);
+}
+
+@keyframes scrollWheel {
+  0% { top: 4px; opacity: 1; }
+  100% { top: 16px; opacity: 0; }
+}
+
+
+/* ==========================================================================
+   PERBAIKAN LIGHT MODE: TEMA ALAM (BOTANICAL GARDEN)
+   ========================================================================== */
+
+/* 1. VARIABEL GLOBAL UNTUK MODE TERANG */
+[data-theme="light"] {
+  /* Skema Warna Alam */
+  --bg-primary: #FAF8F5; /* Krem lembut (Warna latar utama) */
+  --text-primary: #1A2D23; /* Hijau hutan tua (Hampir hitam, tapi organik) */
+  --text-secondary: #6A8D73; /* Hijau sage (Untuk deskripsi) */
+  --accent-color: #2D6A4F; /* Hijau daun vibrant (Untuk tombol & highlight) */
+  --border-subtle: #E0DACD; /* Beige hangat (Untuk garis tepi) */
+  --bg-card: rgba(255, 255, 255, 0.7); /* Kaca putih lembut */
+  
+  /* Reset Neon Variables agar tidak digunakan di Light Mode */
+  --neon-cyan: var(--accent-color); 
+  --neon-pink: #A06B82; /* Muted rose/pink tua (Untuk variasi) */
+  --glow-cyan: 0 5px 15px rgba(45, 106, 79, 0.1); /* Shadow lembut, bukan neon */
+  --bg-navbar: rgba(250, 248, 245, 0.95);
+  
+  /* Reset elemen spesifik yang keras */
+  --bg-button: var(--accent-color);
+  --text-button: #FFFFFF;
+}
+
+/* 2. PENYESUAIAN GLOBAL & BODY */
+[data-theme="light"] body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* 3. PENYESUAIAN HEADER & NAVIGASI */
+[data-theme="light"] .navbar {
+  background: var(--bg-navbar);
+  border-bottom: 1px solid var(--border-subtle);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+}
+[data-theme="light"] .nav-link { color: var(--text-primary); }
+[data-theme="light"] .nav-link:hover { color: var(--accent-color); }
+
+/* 4. PENYESUAIAN HERO SECTION */
+[data-theme="light"] .hero-name { color: var(--text-primary); }
+[data-theme="light"] .hero-bio { color: var(--text-secondary); }
+
+/* TOMBOL PRIMARY (Warna Alam Hijau Tua) */
+[data-theme="light"] .btn-primary {
+  background: var(--accent-color);
+  color: #fff; /* Pastikan teks putih agar terbaca */
+  box-shadow: 0 5px 15px rgba(45, 106, 79, 0.2);
+  border: 2px solid transparent;
+}
+[data-theme="light"] .btn-primary:hover {
+  background: #1E3F35; /* Darker green on hover */
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(30, 63, 53, 0.2);
+}
+
+/* TOMBOL OUTLINE (Garis Hijau) */
+[data-theme="light"] .btn-outline {
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+  background: transparent;
+}
+[data-theme="light"] .btn-outline:hover {
+  background: rgba(45, 106, 79, 0.05);
+}
+
+/* IKON SOSIAL MEDIA (LIGHT MODE) */
+[data-theme="light"] .social-icon {
+  background: #ffffff !important; /* Latar putih solid agar menonjol */
+  color: var(--accent-color) !important; /* Warna ikon hijau tua tegas */
+  border: 1px solid rgba(45, 106, 79, 0.2) !important; /* Garis tepi hijau tipis */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important; /* Bayangan sangat halus */
+}
+[data-theme="light"] .social-icon:hover {
+  background: var(--accent-color) !important; /* Kotak jadi hijau saat disentuh */
+  color: #ffffff !important; /* Ikon berubah putih */
+  border-color: var(--accent-color) !important;
+  box-shadow: 0 8px 20px rgba(45, 106, 79, 0.2) !important; /* Bayangan hijau muncul */
+  transform: translateY(-5px) !important;
+}
+
+/* FOTO PROFIL & IKON MELAYANG (Tanpa Neon) */
+[data-theme="light"] .hero-photo-wrapper {
+  border-color: var(--accent-color);
+  box-shadow: 0 10px 30px rgba(45, 106, 79, 0.15); /* Shadow lembut organik */
+}
+[data-theme="light"] .floating-icon {
+  background: #fff;
+  border-color: var(--border-subtle);
+  color: var(--text-secondary);
+}
+[data-theme="light"] .floating-icon:hover {
+  color: var(--accent-color);
+  border-color: var(--accent-color);
+  box-shadow: 0 5px 15px rgba(45, 106, 79, 0.2);
+}
+
+/* 5. PENYESUAIAN MARQUEE (Pita Berjalan) */
+[data-theme="light"] .tech-marquee {
+  background: #fff; /* Latar putih bersih untuk pita berjalan */
+  border-top: 1px solid var(--border-subtle);
+}
+[data-theme="light"] .marquee-content span { color: var(--text-secondary); }
+
+/* 6. PENYESUAIAN ABOUT SECTION */
+/* ==========================================================================
+   PERBAIKAN BACKGROUND ABOUT SECTION (HIJAU SAGE TEGAS)
+   ========================================================================== */
+
+[data-theme="light"] .about-section {
+  /* Menggunakan warna hijau sage yang lebih berani dan menyatu dengan tema alam */
+  background: #D0DED4 !important; 
+  
+  /* Garis batas atas sedikit lebih gelap untuk pemisah yang elegan */
+  border-top: 1px solid rgba(45, 106, 79, 0.15) !important;
+  
+  position: relative;
+  z-index: 2;
+}
+
+/* Mempercantik kotak kaca agar tetap putih bersih dan menonjol di atas warna hijau */
+[data-theme="light"] .glass-box {
+  background: rgba(255, 255, 255, 0.75) !important; 
+  backdrop-filter: blur(15px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 0 15px 35px rgba(45, 106, 79, 0.1) !important;
+}
+
+/* ==========================================================================
+   PERBAIKAN KONTRAS TEKS ABOUT SECTION (LIGHT MODE)
+   ========================================================================== */
+
+/* 1. Ubah teks paragraf menjadi jauh lebih gelap agar terbaca jelas */
+[data-theme="light"] .about-text {
+  color: #1A2D23 !important; /* Hijau hutan sangat gelap */
+  font-weight: 400; /* Pastikan ketebalannya pas */
+}
+
+/* 2. Pastikan judul utama juga tegas */
+[data-theme="light"] .section-title {
+  color: #14231B !important; /* Hampir hitam pekat */
+}
+
+/* 3. Bersihkan efek glow pada kata "LAYAR" agar lebih tajam */
+[data-theme="light"] .section-title .text-glow {
+  color: #2D6A4F !important; /* Hijau daun solid */
+  text-shadow: none !important; /* Matikan bayangan neon yang bikin buram */
+}
+
+/* 7. PENYESUAIAN FOOTER */
+[data-theme="light"] .main-footer {
+  background: #FAF8F5; /* Latar krem solid */
+  border-top: 1px solid var(--border-subtle);
+}
+[data-theme="light"] .footer-logo span { color: var(--accent-color); text-shadow: none; }
+[data-theme="light"] .footer-links a:hover,
+[data-theme="light"] .footer-social a:hover {
+  color: var(--accent-color);
+}
+[data-theme="light"] .footer-bottom .heart { color: var(--accent-color); }
+
+/* ==========================================================================
+   PERBAIKAN BACKGROUND LIGHT MODE (REVISI PENUH)
+   ========================================================================== */
+
+/* 1. Terapkan background alam ke SELURUH halaman (body) secara paksa */
+body[data-theme="light"],
+html[data-theme="light"] body,
+[data-theme="light"] {
+  background-image: none !important;
+  background: radial-gradient(circle at top right, #E8F5E9 0%, #FAF8F5 70%) !important;
+  min-height: 100vh;
+}
+
+/* 2. Buat Hero Section menjadi transparan agar menyatu mulus dengan body */
+[data-theme="light"] .hero, 
+[data-theme="light"] .hero-section,
+body[data-theme="light"] .hero {
+  background: transparent !important;
+  background-image: none !important;
+}
+
+/* Matikan overlay gelap bawaan dari dark mode */
+[data-theme="light"] .hero::before,
+[data-theme="light"] .hero::after,
+body[data-theme="light"]::before {
+  display: none !important;
+}
+
+/* ==========================================================================
+   PERBAIKAN NAVBAR LIGHT MODE (TEMA HIJAU ALAM)
+   ========================================================================== */
+
+/* 1. Ubah Background Navbar menjadi Hijau Hutan Tua */
+[data-theme="light"] .navbar,
+body[data-theme="light"] .navbar {
+  background: var(--accent-color) !important; /* Menggunakan hijau daun dari tema */
+  border-bottom: none !important; /* Hapus garis bawah agar menyatu mulus */
+  box-shadow: 0 4px 20px rgba(45, 106, 79, 0.3) !important;
+}
+
+/* 2. Ubah Teks Logo (ACHMAD RAFFY NADJIB.) di kiri atas menjadi Terang */
+[data-theme="light"] .navbar .logo,
+[data-theme="light"] .nav-logo {
+  color: #FAF8F5 !important; /* Krem terang */
+}
+
+/* 3. Ubah Link Menu (Home, Portofolio, Prestasi) menjadi Terang */
+[data-theme="light"] .nav-link {
+  color: rgba(250, 248, 245, 0.8) !important; /* Krem sedikit transparan */
+}
+[data-theme="light"] .nav-link:hover {
+  color: #FFFFFF !important; /* Putih bersih saat di-hover */
+}
+
+/* 4. Ubah Tombol Tema (Matahari) menjadi Terang */
+[data-theme="light"] .theme-toggle,
+[data-theme="light"] .dark-mode-toggle {
+  color: #FAF8F5 !important;
+  border-color: rgba(250, 248, 245, 0.4) !important;
+}
+[data-theme="light"] .theme-toggle:hover,
+[data-theme="light"] .dark-mode-toggle:hover {
+  background: rgba(250, 248, 245, 0.1) !important;
+  border-color: #FAF8F5 !important;
+}
+
+/* ==========================================================================
+   PERBAIKAN FOOTER LIGHT MODE (TEMA HIJAU ALAM)
+   ========================================================================== */
+
+/* 1. Ubah Background Footer menjadi Hijau Hutan Tua */
+[data-theme="light"] .main-footer {
+  background: var(--accent-color) !important; /* Hijau daun dari tema */
+  border-top: none !important;
+  /* Tambahkan sedikit bayangan di atasnya agar lebih berdimensi */
+  box-shadow: 0 -4px 30px rgba(45, 106, 79, 0.1) !important;
+}
+
+/* 2. Ubah warna teks judul (Logo & Heading) */
+[data-theme="light"] .footer-logo,
+[data-theme="light"] .footer-heading {
+  color: #FAF8F5 !important; /* Krem terang */
+}
+
+/* Menyesuaikan kata "NADJIB" di logo footer */
+[data-theme="light"] .footer-logo .text-glow {
+  color: #FFFFFF !important; /* Putih bersih */
+}
+
+/* 3. Ubah warna teks deskripsi */
+[data-theme="light"] .footer-desc {
+  color: rgba(250, 248, 245, 0.85) !important;
+}
+
+/* 4. Ubah warna link navigasi & sosial media */
+[data-theme="light"] .footer-links a,
+[data-theme="light"] .footer-social a {
+  color: rgba(250, 248, 245, 0.8) !important;
+}
+
+/* Saat link di-hover menjadi putih bersih */
+[data-theme="light"] .footer-links a:hover,
+[data-theme="light"] .footer-social a:hover {
+  color: #FFFFFF !important;
+}
+
+/* 5. Ubah garis pemisah dan teks di bagian paling bawah (Copyright) */
+[data-theme="light"] .footer-bottom {
+  border-top: 1px solid rgba(250, 248, 245, 0.15) !important;
+  color: rgba(250, 248, 245, 0.8) !important;
+}
+
+/* Menyesuaikan ikon hati (♥) agar tetap terlihat cantik (Pink pastel) */
+[data-theme="light"] .footer-bottom .heart {
+  color: #FFB3C6 !important; 
+}
+
+
+/* ==========================================================================
+   PERBAIKAN MARQUEE LIGHT MODE (PITA HIJAU GELAP)
+   ========================================================================== */
+
+[data-theme="light"] .tech-marquee {
+  background: var(--accent-color) !important; /* Latar menjadi hijau hutan tua */
+  border-top: none !important;
+  border-bottom: none !important;
+  /* Tambahkan sedikit shadow agar terasa seperti pita yang mengikat halaman */
+  box-shadow: 0 4px 15px rgba(45, 106, 79, 0.15) !important;
+}
+
+/* ==========================================================================
+   PERBAIKAN FONT MARQUEE (LEBIH RINGAN & CLEAN)
+   ========================================================================== */
+
+[data-theme="light"] .marquee-content span {
+  color: #FAF8F5 !important; /* Tetap krem terang */
+  
+  /* TURUNKAN KETEBALAN: Dari 600 menjadi 400 atau 500 */
+  font-weight: 500 !important; 
+  
+  /* TAMBAHKAN JARAK: Agar huruf tidak menempel */
+  letter-spacing: 1.5px !important;
+  
+  /* SEDIKIT KECILKAN UKURAN (Opsional, agar lebih proporsional) */
+  font-size: 1rem !important;
+  
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+}
+
+
+/* ==========================================================================
+   SHOWCASE ADDITIONAL STYLES
+   ========================================================================== */
+
+.showcase-title {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 3rem;
+  color: var(--text-primary);
+}
+
+/* Achievements Grid */
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-bottom: 5rem;
+}
+
+.achievement-card {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 2.5rem;
+  border-radius: 20px;
+  border: 1px solid var(--border-subtle);
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.achievement-card:hover {
+  border-color: var(--neon-pink);
+  transform: translateY(-5px);
+  background: rgba(255, 45, 108, 0.02);
+}
+
+.ach-icon { font-size: 3rem; margin-bottom: 1.5rem; }
+.achievement-card h4 { color: var(--text-primary); margin-bottom: 1rem; font-size: 1.2rem; }
+.achievement-card p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; }
+
+/* Skills Showcase */
+.skills-showcase { padding-bottom: 8rem; }
+.skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+.skill-category h5 { color: var(--text-primary); margin-bottom: 1.5rem; font-size: 1.1rem; letter-spacing: 1px; }
+
+.skill-tags { display: flex; flex-wrap: wrap; gap: 0.8rem; }
+.skill-tags span {
+  padding: 0.6rem 1.2rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+}
+
+.skill-tags span:hover {
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+  background: rgba(0, 255, 224, 0.05);
+}
+
+/* Light Mode Adjustments */
+[data-theme="light"] .achievement-card { background: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+[data-theme="light"] .skill-tags span { background: #fff; border-color: #eee; }
+
+@media (max-width: 768px) {
+  .skills-grid { grid-template-columns: 1fr; }
+}
+
+/* ==========================================================================
+   KOMPRESI LAYOUT SHOWCASE (AGAR PAS 1 LAYAR LAPTOP)
+   ========================================================================== */
+
+/* 1. Tarik section utama lebih ke atas, dekatkan dengan Navbar */
+.portfolio-grid-section {
+  padding-top: 5.5rem !important; 
+  padding-bottom: 2rem !important;
+  min-height: 100vh;
+  
+  /* HAPUS background-color: #0a0a0a; dan GANTI dengan gradasi ini */
+  background: radial-gradient(circle at top center, #0d1f23 0%, #050505 80%) !important;
+  
+  position: relative;
+  z-index: 2;
+}
+
+/* 2. Dekatkan judul "PROYEK UNGGULAN" ke kartu proyek */
+.showcase-title {
+  margin-bottom: 1.5rem !important;
+  font-size: 2.2rem !important; /* Sedikit dirampingkan */
+}
+
+/* 3. Buat gambar proyek lebih pipih */
+.project-image {
+  height: 150px !important; 
+}
+
+/* 4. Padatkan area teks di dalam kartu */
+.project-info {
+  padding: 1.2rem !important; /* Ruang kosong dalam kartu dikurangi */
+}
+
+.project-info h3 {
+  font-size: 1.15rem !important; /* Judul proyek sedikit dikecilkan */
+  margin-bottom: 0.5rem !important;
+}
+
+.project-info p {
+  font-size: 0.85rem !important; /* Teks deskripsi dikecilkan agar hemat baris */
+  line-height: 1.5 !important;
+  margin-bottom: 1rem !important;
+}
+
+/* 5. Padatkan tombol/tag teknologi (jika ada) */
+.tech-stack {
+  margin-bottom: 1rem !important;
+}
+.tech-stack span {
+  padding: 0.2rem 0.6rem !important;
+  font-size: 0.75rem !important;
+}
+
+
+/* ==========================================================================
+   TRANSPARANSI TOTAL SHOWCASE (MENYAMAKAN DENGAN HOME)
+   ========================================================================== */
+
+.portfolio-grid-section,
+.achievements-section,
+.skills-showcase {
+  /* Memaksa latar belakang menjadi tembus pandang 100% */
+  background: transparent !important; 
+  
+  /* Menghilangkan efek blur/kaca yang sebelumnya kita buat */
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  
+  /* Menghilangkan garis batas pemisah jika ada */
+  border: none !important; 
+  
+  /* Biarkan padding tetap seperti sebelumnya agar jarak atas-bawahnya tetap rapi */
+  position: relative;
+  z-index: 2;
+}
+
+/* ==========================================================================
+   PENERAPAN BACKGROUND PEKAT UNTUK SECTION PRESTASI
+   ========================================================================== */
+
+/* ==========================================================================
+   MENYAMAKAN GRADASI & TRANSPARANSI PRESTASI DENGAN HOME
+   ========================================================================== */
+
+.achievements-section {
+  /* Mengurangi kepekatan warna hitam agar setara dengan halaman Home */
+  background: rgba(0, 0, 0, 0.4) !important; 
+  
+  /* MENGHAPUS efek blur agar tekstur pegunungan kembali tajam */
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+
+  /* MENGHAPUS bayangan tebal di bagian atas */
+  box-shadow: none !important;
+
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding-top: 5.5rem !important; 
+  padding-bottom: 2rem !important;
+  position: relative;
+  z-index: 2;
+}
+
+/* Memastikan kontainer di dalamnya tetap mengambil lebar penuh */
+.achievements-section .portfolio-container {
+  width: 100%;
+}
+
+/* Merampingkan jarak agar muat dengan lega */
+.achievements-section .showcase-title {
+  margin-bottom: 2rem !important; 
+}
+
+.achievements-grid {
+  margin-bottom: 0 !important; 
+}
+
+/* ==========================================================================
+   MEMBERI RUANG BERNAPAS (GAP) PADA KARTU PRESTASI
+   ========================================================================== */
+
+/* Memperlebar jarak antar 3 kotak tersebut */
+.achievements-grid {
+  gap: 3.5rem !important; /* Sebelumnya hanya 2rem, kita buat lebih renggang */
+}
+
+/* Memperluas ruang di dalam kotaknya agar teks tidak terasa sesak */
+.achievement-card {
+  padding: 3rem 2rem !important; 
+}
+
+/* ==========================================================================
+   PERBAIKAN FINAL: UKURAN KARTU & JARAK PRESTASI
+   ========================================================================== */
+
+/* 1. Batasi lebar maksimal area prestasi agar kotak tidak melar ke ujung layar */
+.achievements-section .portfolio-container {
+  max-width: 1050px !important; 
+  margin: 0 auto !important; /* Memastikan posisinya tepat di tengah */
+}
+
+/* 2. Paksa grid menjadi persis 3 kolom dengan jarak yang sangat lega */
+.achievements-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 3rem !important; 
+}
+
+/* 3. Penyesuaian khusus jika dibuka di HP (berubah jadi 1 kolom memanjang ke bawah) */
+@media (max-width: 768px) {
+  .achievements-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+
+/* ==========================================================================
+   PERBAIKAN FINAL: SECTION KEAHLIAN TEKNIS & TAGS
+   ========================================================================== */
+
+.skills-showcase {
+  /* Lapisan hitam 85% - transisi makin gelap menuju footer */
+  background: rgba(0, 0, 0, 0.85) !important; 
+  backdrop-filter: blur(15px) !important;
+  -webkit-backdrop-filter: blur(15px) !important;
+
+  /* Ruang napas atas dan bawah */
+  padding: 6rem 5% 6rem 5% !important;
+  position: relative;
+  z-index: 2;
+  
+  /* Garis batas sangat halus di bagian bawah sebelum footer */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+/* 1. Mengunci lebar area agar tidak melar ke ujung layar */
+.skills-showcase .portfolio-container {
+  max-width: 900px !important; /* Dibuat lebih ramping agar fokus di tengah */
+  margin: 0 auto !important;
+  width: 100%;
+}
+
+/* 2. Membagi area menjadi 2 kolom rapi (Development & Data) */
+.skills-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 4rem !important;
+  margin-top: 3rem !important;
+}
+
+/* 3. Merapikan Judul Kategori (Development / Data & Design) */
+.skill-category h5 {
+  font-size: 1.3rem !important;
+  color: #ffffff !important;
+  margin-bottom: 1.5rem !important;
+  /* Tambahan aksen garis neon tipis di bawah judul */
+  border-bottom: 2px solid var(--neon-cyan); 
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
+
+/* 4. Menyulap kotak skill menjadi tombol pil (Pills) bergaya Neon */
+.skill-tags {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 1rem !important;
+}
+
+.skill-tags span {
+  background: rgba(0, 255, 224, 0.05) !important;
+  border: 1px solid rgba(0, 255, 224, 0.2) !important;
+  color: #FAF8F5 !important;
+  padding: 0.6rem 1.2rem !important;
+  border-radius: 50px !important; /* Membuat ujungnya membulat sempurna */
+  font-size: 0.95rem !important;
+  letter-spacing: 0.5px !important;
+  transition: all 0.3s ease !important;
+  cursor: default;
+}
+
+/* Efek menyala terang saat kursor diarahkan ke kotak skill */
+.skill-tags span:hover {
+  background: var(--neon-cyan) !important;
+  color: #000000 !important;
+  box-shadow: 0 0 15px rgba(0, 255, 224, 0.5) !important;
+  transform: translateY(-3px);
+}
+
+/* Responsif: Berubah jadi 1 kolom berderet ke bawah saat dibuka di HP */
+@media (max-width: 768px) {
+  .skills-grid {
+    grid-template-columns: 1fr !important;
+    gap: 3rem !important;
+  }
+}
+
+
+/* ==========================================================================
+   EFEK SELANG-SELING: TRANSPARANSI TOTAL UNTUK KEAHLIAN
+   ========================================================================== */
+
+.skills-showcase {
+  /* Mengembalikan transparansi total agar foto pegunungan kembali tajam */
+  background: transparent !important; 
+  
+  /* Menghapus efek kaca buram */
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.theme-toggle {
+  display: block !important;
+  background: transparent !important;
+  color: #ffffff !important;
+  border: none !important;
+  font-size: 1.5rem !important;
+  cursor: pointer !important;
+  transition: color 0.3s ease !important;
+  margin-left: auto; 
+  
+  /* 3 BARIS INI WAJIB ADA AGAR BISA DIKLIK */
+  position: relative !important;
+  z-index: 9999 !important; 
+  pointer-events: auto !important; 
+}
+
+.theme-toggle:hover {
+  color: var(--neon-cyan) !important;
+}
+
+
+/* ==========================================================================
+   PERBAIKAN POSISI NAVBAR (MENU DI KANAN)
+   ========================================================================== */
+
+/* 1. Atur kontainer utama agar membentang dari kiri ke kanan */
+.nav-container {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important; 
+}
+
+/* 2. KUNCI UTAMA: Dorong seluruh menu mentok ke sisi kanan layar */
+.nav-menu {
+  margin-left: auto !important; 
+  display: flex !important;
+  align-items: center !important;
+  gap: 2rem !important; /* Memberi jarak napas antar teks menu */
+}
+
+/* 3. Rapikan posisi tombol matahari agar berada persis di sebelah menu */
+.theme-toggle {
+  margin-left: 2.5rem !important; /* Jarak dari menu 'Kontak' ke ikon matahari */
+  display: block !important;
+  background: transparent !important;
+  color: #ffffff !important;
+  border: none !important;
+  font-size: 1.5rem !important;
+  cursor: pointer !important;
+  transition: color 0.3s ease !important;
+  position: relative !important;
+  z-index: 9999 !important; 
+  pointer-events: auto !important; 
+}
+
+/* Penyesuaian khusus jika dibuka di HP agar tetap rapi */
+@media (max-width: 768px) {
+  .nav-menu {
+    margin-left: 0 !important; /* Reset dorongan saat mode HP (menu vertikal) */
+  }
+}
+
+
+
+/* ==========================================================================
+   DAY / NIGHT MODE TOGGLE (DESAIN REFERENSI)
+   ========================================================================== */
+
+.theme-toggle-wrapper {
+  margin-left: 2rem !important;
+  display: flex !important;
+  align-items: center !important;
+  /* Z-index tinggi agar tidak tertutup elemen lain */
+  position: relative !important;
+  z-index: 10000 !important; 
+}
+
+/* Sembunyikan checkbox asli */
+.theme-checkbox {
+  opacity: 0 !important;
+  position: absolute !important;
+  width: 0 !important;
+  height: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Label sebagai wadah utama (bentuk pil) */
+.theme-label {
+  width: 140px !important;
+  height: 44px !important;
+  border-radius: 50px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  cursor: pointer !important;
+  position: relative !important;
+  padding: 0 5px !important;
+  overflow: hidden !important;
+  /* Latar belakang default: Biru gradasi (Night Mode) */
+  background: linear-gradient(135deg, #00333f 0%, #294c7d 100%) !important;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.2) !important;
+  transition: background 0.4s ease !important;
+}
+
+/* Teks Mode (Day/Night) */
+.theme-text {
+  font-family: Arial, sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 0.75rem !important;
+  color: white !important;
+  position: absolute !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  transition: opacity 0.4s ease, transform 0.4s ease !important;
+  white-space: nowrap !important;
+  pointer-events: none !important; /* Teks tidak menghalangi klik */
+}
+
+/* Posisi Teks Default (Night Mode) */
+.dark-text {
+  right: 15px !important;
+  opacity: 1 !important;
+}
+.light-text {
+  left: 20px !important;
+  opacity: 0 !important; /* Sembunyikan teks Day Mode saat awal */
+  transform: translateY(-50%) translateX(-20px) !important; /* Siapkan untuk animasi masuk */
+}
+
+/* Bola Putih (Knob) */
+.theme-ball {
+  width: 34px !important;
+  height: 34px !important;
+  background-color: white !important;
+  border-radius: 50% !important;
+  position: absolute !important;
+  left: 5px !important; /* Mulai di kiri */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55) !important; /* Animasi membal */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3) !important;
+  pointer-events: none !important; /* Biarkan label yang menangani klik */
+}
+
+/* Ikon SVG di dalam bola */
+.theme-ball svg {
+  width: 20px !important;
+  height: 20px !important;
+  position: absolute !important;
+  transition: opacity 0.4s ease, transform 0.4s ease !important;
+}
+
+.icon-sun {
+  opacity: 0 !important;
+  color: #ffb703 !important; /* Kuning matahari */
+  transform: rotate(-90deg) scale(0.5) !important;
+}
+
+.icon-moon {
+  opacity: 1 !important;
+  color: #00d2ff !important; /* Biru bulan */
+  transform: rotate(0deg) scale(1) !important;
+}
+
+/* ==========================================================================
+   PERUBAHAN SAAT DIKLIK (CHECKED STATE -> DAY MODE)
+   ========================================================================== */
+
+/* 1. Latar belakang berubah gradasi pink/orange */
+.theme-checkbox:checked + .theme-label {
+  background: linear-gradient(135deg, #169e34 0%, #3ae85f 100%) !important;
+}
+
+/* 2. Bola bergerak ke kanan */
+.theme-checkbox:checked + .theme-label .theme-ball {
+  transform: translateX(96px) !important; /* Menggeser bola ke kanan */
+}
+
+/* 3. Teks berubah */
+.theme-checkbox:checked + .theme-label .dark-text {
+  opacity: 0 !important;
+  transform: translateY(-50%) translateX(20px) !important;
+}
+.theme-checkbox:checked + .theme-label .light-text {
+  opacity: 1 !important;
+  transform: translateY(-50%) translateX(0) !important;
+}
+
+/* 4. Ikon berganti */
+.theme-checkbox:checked + .theme-label .icon-moon {
+  opacity: 0 !important;
+  transform: rotate(90deg) scale(0.5) !important;
+}
+.theme-checkbox:checked + .theme-label .icon-sun {
+  opacity: 1 !important;
+  transform: rotate(0deg) scale(1) !important;
+}
+
+
+/* ==========================================================================
+   KEAHLIAN TEKNIS JENNIH (MENYAMAKAN DENGAN GAMBAR REFERENSI)
+   ========================================================================== */
+.skills-showcase {
+  /* Mengurangi lapisan hitam drastis menjadi sangat tipis (20%) */
+  background: rgba(0, 0, 0, 0.4) !important; 
+  
+  /* MENGHAPUS efek kaca buram agar foto pegunungan kembali tajam sempurna */
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  
+  /* MENGHAPUS garis batas atas/bawah agar terlihat seamless dengan pegunungan */
+  border-top: none !important;
+  border-bottom: none !important;
+
+  /* Tambahan: Pastikan teks judul dan konten di dalamnya berwarna terang */
+  position: relative;
+  z-index: 2;
+}
+
+/* Memastikan warna teks judul tetap menonjol di atas background jernih */
+.skills-showcase .showcase-title {
+  color: #FAF8F5 !important;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5) !important; /* Memberi sedikit bayangan pada teks agar lebih mudah dibaca */
+}
+
+/* ==========================================================================
+   MENGHILANGKAN CELAH TERANG DI BAWAH FOOTER
+   ========================================================================== */
+.main-footer {
+  /* Menghilangkan jarak kosong di luar kotak */
+  margin-bottom: 0 !important; 
+  
+  /* Menambahkan ruang di dalam kotak agar warna gelapnya turun sampai mentok ke bawah layar, sekaligus memberi ruang aman agar teks footer tidak tertimpa pita berjalan */
+  padding-bottom: 5rem !important; 
+}
+
+
+/* ==========================================================================
+   PERBAIKAN WARNA KEAHLIAN TEKNIS KHUSUS LIGHT MODE (TEMA ALAM)
+   ========================================================================== */
+
+/* 1. Membersihkan Latar Belakang yang Kusam */
+[data-theme="light"] .skills-showcase {
+  background: transparent !important; /* Menghilangkan lapisan abu-abu kotor */
+  border: none !important;
+}
+
+/* 2. Memperbaiki Warna Judul Utama agar Tegas */
+[data-theme="light"] .skills-showcase .showcase-title {
+  color: #1A2D23 !important; /* Hijau hutan gelap */
+  text-shadow: none !important; /* Menghapus bayangan hitam yang bikin kotor */
+}
+
+[data-theme="light"] .skills-showcase .showcase-title .text-glow {
+  color: #2D6A4F !important; /* Hijau daun cerah */
+  text-shadow: none !important;
+}
+
+/* 3. Memperbaiki Warna Sub-Judul (Development & Data) */
+[data-theme="light"] .skill-category h5 {
+  color: #1A2D23 !important; /* Hijau gelap agar terbaca jelas */
+  border-bottom: 2px solid #2D6A4F !important; /* Garis bawah hijau cerah */
+}
+
+/* 4. Menyulap Tombol Keahlian (Tags) Menjadi Elegan */
+[data-theme="light"] .skill-tags span {
+  background: rgba(255, 255, 255, 0.8) !important; /* Putih bersih transparan */
+  color: #2D6A4F !important; /* Teks hijau */
+  border: 1px solid rgba(45, 106, 79, 0.2) !important; /* Garis tepi hijau tipis */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.03) !important;
+}
+
+/* Efek saat kursor menyentuh tombol keahlian di Light Mode */
+[data-theme="light"] .skill-tags span:hover {
+  background: #2D6A4F !important; /* Berubah hijau solid */
+  color: #ffffff !important; /* Teks jadi putih */
+  box-shadow: 0 5px 15px rgba(45, 106, 79, 0.2) !important;
+  transform: translateY(-3px) !important;
+}
+
+
+/* ==========================================================================
+   WARNA LIGHT MODE SELANG-SELING (PUTIH & HIJAU PUCAT)
+   ========================================================================== */
+
+/* 1. Background Dasar Halaman & Urutan Ganjil (Putih Tulang/Bersih) */
+body[data-theme="light"],
+[data-theme="light"] {
+  background: #FAF8F5 !important; 
+  background-image: none !important; 
+  color: #1A2D23 !important;
+}
+
+[data-theme="light"] .hero,
+[data-theme="light"] .portfolio-grid-section,
+[data-theme="light"] .biodata-section,
+[data-theme="light"] .cta-section {
+  background: #FAF8F5 !important; 
+}
+
+/* 2. Section Urutan Genap (Hijau Pucat / Sage Green) */
+[data-theme="light"] .about-section,
+[data-theme="light"] .achievements-section,
+[data-theme="light"] .skills-showcase {
+  background: #DFE6E1 !important; 
+  border-top: none !important;
+  border-bottom: none !important;
+}
+
+/* 3. Mempercantik Kartu (Proyek & Prestasi) agar kontras di latar terang */
+[data-theme="light"] .project-card,
+[data-theme="light"] .achievement-card {
+  background: #FFFFFF !important; /* Kartu berwarna putih bersih */
+  border: 1px solid rgba(45, 106, 79, 0.1) !important; /* Garis tepi hijau transparan */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04) !important; /* Bayangan sangat halus */
+}
+
+/* 4. Menegaskan Warna Teks pada Kartu Proyek dan Prestasi */
+[data-theme="light"] .project-info h3,
+[data-theme="light"] .achievement-card h4,
+[data-theme="light"] .biodata-section h3 {
+  color: #1A2D23 !important; /* Hijau tua tegas untuk Judul Kartu */
+}
+
+[data-theme="light"] .project-info p,
+[data-theme="light"] .achievement-card p,
+[data-theme="light"] .biodata-section p {
+  color: #355E44 !important; /* Hijau medium untuk Teks Deskripsi */
+}
+
+/* Menyesuaikan tombol/link "Lihat Detail" di dalam kartu proyek jika ada */
+[data-theme="light"] .project-link {
+  color: #2D6A4F !important;
+  border-color: #2D6A4F !important;
+}
+[data-theme="light"] .project-link:hover {
+  background: #2D6A4F !important;
+  color: #FFFFFF !important;
+}
+
+
+/* ==========================================================================
+   PERBAIKAN WARNA LOGO "NADJIB" DI NAVBAR LIGHT MODE
+   ========================================================================== */
+
+[data-theme="light"] .navbar .text-glow,
+[data-theme="light"] .nav-logo .text-glow {
+  /* Menggunakan warna Hijau Mint Terang agar kontras dengan background Hijau Tua */
+  color: #8DE0B1 !important; 
+  
+  /* Menghilangkan segala sisa bayangan/shadow yang membuat teks terlihat kotor */
+  text-shadow: none !important; 
+  opacity: 1 !important; /* Memastikan teks 100% solid, tidak transparan */
+  font-weight: bold !important;
+}
+
+/* Berlaku juga untuk teks "NADJIB" di Footer agar seragam */
+[data-theme="light"] .footer-logo .text-glow {
+  color: #8DE0B1 !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+
+
+/* ==========================================================================
+   SECTION TIKTOK AFFILIATE
+   ========================================================================== */
+
+.affiliate-section {
+  padding: 6rem 5%;
+  position: relative;
+  z-index: 2;
+  /* Default mode gelap: Transparan agar mengikuti background pegunungan */
+  background: transparent;
+}
+
+/* Penyesuaian Light Mode (Selang-Seling: Hijau Pucat) */
+[data-theme="light"] .affiliate-section {
+  background: #DFE6E1 !important;
+  border-top: 1px solid rgba(45, 106, 79, 0.05);
+}
+
+/* Pastikan teks tombol affiliate tetap putih di Light Mode */
+[data-theme="light"] .affiliate-section .btn-primary {
+  color: #FFFFFF !important;
+}
+
+
+/* ==========================================================================
+   GRID KARTU AFFILIATE (UKURAN LEBIH KECIL DARI PORTOFOLIO)
+   ========================================================================== */
+
+.affiliate-grid {
+  display: grid !important;
+  /* Kolom dikecilkan menjadi 220px (Portofolio 300px) agar muat lebih banyak kartu */
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+  gap: 1.5rem !important;
+}
+
+.affiliate-card {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(0, 255, 224, 0.2) !important;
+  border-radius: 12px !important; /* Sudut sedikit lebih kaku dari portofolio */
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease !important;
+}
+
+.affiliate-card:hover {
+  transform: translateY(-5px) !important;
+  border-color: var(--neon-cyan) !important;
+  box-shadow: 0 10px 20px rgba(0, 255, 224, 0.1) !important;
+}
+
+/* Gambar dipipihkan */
+.affiliate-image {
+  width: 100% !important;
+  height: 140px !important; /* Lebih pendek dari kartu proyek */
+  background-color: #1a1a1a !important;
+  overflow: hidden !important;
+}
+
+.affiliate-image img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  transition: transform 0.5s ease !important;
+}
+
+.affiliate-card:hover .affiliate-image img {
+  transform: scale(1.08) !important;
+}
+
+/* Jarak dan ukuran teks dipadatkan */
+.affiliate-info {
+  padding: 1rem !important; /* Ruang dalam diperkecil */
+  display: flex !important;
+  flex-direction: column !important;
+  flex-grow: 1 !important;
+}
+
+.affiliate-info h4 {
+  font-family: var(--font-display) !important;
+  font-size: 1.2rem !important; /* Font judul dikecilkan */
+  color: #ffffff !important;
+  margin-bottom: 0.5rem !important;
+  letter-spacing: 0.5px !important;
+}
+
+.affiliate-info p {
+  color: #a0aec0 !important;
+  font-size: 0.8rem !important; /* Font deskripsi dikecilkan */
+  line-height: 1.5 !important;
+  margin-bottom: 1rem !important;
+  flex-grow: 1 !important;
+}
+
+/* Desain Tombol "Beli di TikTok" yang mungil */
+.btn-affiliate {
+  text-align: center !important;
+  padding: 0.5rem !important;
+  background: rgba(0, 255, 224, 0.1) !important;
+  color: var(--neon-cyan) !important;
+  border: 1px solid var(--neon-cyan) !important;
+  border-radius: 6px !important;
+  font-size: 0.75rem !important;
+  font-weight: bold !important;
+  text-transform: uppercase !important;
+  transition: all 0.3s ease !important;
+  text-decoration: none !important;
+}
+
+.btn-affiliate:hover {
+  background: var(--neon-cyan) !important;
+  color: #000 !important;
+  box-shadow: 0 0 10px rgba(0, 255, 224, 0.4) !important;
+}
+
+/* ==========================================================================
+   PENYESUAIAN KARTU AFFILIATE UNTUK LIGHT MODE (TEMA ALAM)
+   ========================================================================== */
+
+[data-theme="light"] .affiliate-card {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(45, 106, 79, 0.1) !important;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03) !important;
+}
+
+[data-theme="light"] .affiliate-info h4 {
+  color: #1A2D23 !important;
+}
+
+[data-theme="light"] .affiliate-info p {
+  color: #355E44 !important;
+}
+
+[data-theme="light"] .btn-affiliate {
+  background: transparent !important;
+  color: #2D6A4F !important;
+  border-color: #2D6A4F !important;
+}
+
+[data-theme="light"] .btn-affiliate:hover {
+  background: #2D6A4F !important;
+  color: #FFFFFF !important;
+}
+
+/* ==========================================================================
+   OPTIMASI AFFILIATE UNTUK 8 KARTU (PAS 4 KOLOM DI LAPTOP)
+   ========================================================================== */
+
+.affiliate-section {
+  padding: 5rem 5% 3rem 5% !important; 
+  min-height: auto !important; 
+  display: block !important; 
+}
+
+.affiliate-grid {
+  display: grid !important;
+  /* KUNCI: Memperbesar batas minimal menjadi 240px agar otomatis tersusun 4 produk per baris */
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)) !important; 
+  gap: 1.5rem !important;
+  max-width: 1100px !important;
+  margin: 0 auto !important;
+}
+
+/* Kembalikan ukuran gambar pakaian ke ukuran normal yang gagah */
+.affiliate-image {
+  height: 180px !important; 
+  flex: 0 0 180px !important;
+}
+
+/* Kembalikan ukuran font agar mudah dibaca */
+.affiliate-info h4 {
+  font-size: 1.15rem !important;
+}
+
+.affiliate-info p {
+  font-size: 0.85rem !important;
+  margin-bottom: 1rem !important;
+}
+
+
+/* ==========================================================================
+   DARK MODE: EFEK SELANG-SELING DENGAN GRADASI HALUS (FINAL FIX)
+   ========================================================================== */
+
+/* Warna Terang: Hijau Teal Gelap (#142529) */
+/* Warna Gelap: Hitam Pekat (#0B1115) */
+
+/* 1. Hero Section (Urutan 1 = Terang) */
+body:not([data-theme="light"]) .hero {
+  background: #142529 !important; /* Dimulai dengan Hijau Teal Gelap */
+}
+
+/* 2. Urutan Genap (About, Achievements, Skills, Affiliate)
+   Transisi membaur dari atas (Terang/Hijau) -> memudar perlahan -> (Gelap/Hitam) */
+body:not([data-theme="light"]) .about-section,
+body:not([data-theme="light"]) .achievements-section,
+body:not([data-theme="light"]) .skills-showcase,
+body:not([data-theme="light"]) .affiliate-section {
+  background: linear-gradient(to bottom, #142529 0%, #0B1115 250px, #0B1115 100%) !important;
+  border: none !important;
+}
+
+/* 3. Urutan Ganjil (Portfolio, Track Record, CTA)
+   Transisi membaur dari atas (Gelap/Hitam) -> memudar perlahan -> (Terang/Hijau) */
+body:not([data-theme="light"]) .portfolio-grid-section,
+body:not([data-theme="light"]) .biodata-section,
+body:not([data-theme="light"]) .cta-section {
+  background: linear-gradient(to bottom, #0B1115 0%, #142529 250px, #142529 100%) !important;
+  border: none !important;
+}
+
+/* 4. Footer tetap Hitam Pekat solid agar menyatu dengan akhir Affiliate */
+body:not([data-theme="light"]) .main-footer {
+  background: #0B1115 !important;
+  border-top: 1px solid rgba(0, 255, 224, 0.05) !important;
+}
+
+
+/* ==========================================================================
+   RESET JARAK TEPI BROWSER (MENCEGAH BOCOR KANAN-KIRI)
+   ========================================================================== */
+html, body {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  overflow-x: hidden !important; /* Sekaligus mencegah web bisa digeser ke samping */
+}
+
+/* ==========================================================================
+   PERBAIKAN FINAL: GRADASI FULL SCREEN TANPA MERUSAK LAYOUT
+   ========================================================================== */
+
+/* 1. Kunci Body agar warna dasarnya menutup seluruh layar monitor */
+body:not([data-theme="light"]) {
+  background-color: #142529 !important; /* Warna Hijau Teal Gelap sebagai dasar */
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  overflow-x: hidden !important;
+}
+
+/* 2. Pastikan semua section 'numpang' secara transparan di atas body */
+body:not([data-theme="light"]) .hero,
+body:not([data-theme="light"]) .main-content,
+body:not([data-theme="light"]) section {
+  background: transparent !important;
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+/* 3. Kembalikan posisi konten ke tengah dengan aman */
+.nav-container, 
+.hero, 
+.portfolio-container, 
+.about-container, 
+.cta-container, 
+.footer-container {
+  max-width: 1200px !important;
+  margin: 0 auto !important; /* Memaksa konten tetap di tengah */
+  padding-left: 5% !important;
+  padding-right: 5% !important;
+  display: flex !important; /* Memastikan layout grid/flex kembali bekerja */
+}
+
+/* 4. Khusus untuk Hero, pastikan susunan foto dan teks kembali normal */
+.hero {
+  display: grid !important;
+  grid-template-columns: 1.2fr 0.8fr !important;
+  align-items: center !important;
+  gap: 2rem !important;
+}
+
+/* 5. Hilangkan garis hitam kaku di navbar */
+body:not([data-theme="light"]) .navbar {
+  background: rgba(20, 37, 41, 0.8) !important; /* Warna yang sama dengan body */
+  backdrop-filter: blur(10px);
+  border-bottom: none !important;
+}
+
+
+/* ==========================================================================
+   MENGEMBALIKAN WARNA NAVBAR SEPERTI SEMULA (MODE GELAP)
+   ========================================================================== */
+
+body:not([data-theme="light"]) .navbar {
+  /* Mengembalikan ke warna hitam keabu-abuan bawaan awal */
+  background: rgba(12, 12, 15, 0.9) !important; 
+  
+  /* Mengembalikan efek kaca buram (Glassmorphism) */
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  
+  /* Memunculkan kembali garis pembatas tipis di bawah navbar */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3) !important;
+}
+
+
+/* ==========================================================================
+   PERBAIKAN WARNA LOGO "ACHMAD RAFFY" DI MODE GELAP
+   ========================================================================== */
+
+body:not([data-theme="light"]) .nav-logo {
+  color: #ffffff !important; /* Memaksa tulisan menjadi putih bersih */
+}
+
+
+/* ==========================================================================
+   PERBAIKAN LAYOUT PORTOFOLIO & CTA YANG MENYAMPING (FLEX FIX)
+   ========================================================================== */
+
+/* 1. Mengembalikan susunan container menjadi blok normal (atas ke bawah) */
+.portfolio-container,
+.cta-container,
+.achievements-section .portfolio-container,
+.skills-showcase .portfolio-container {
+  display: block !important;
+}
+
+/* 2. Memastikan judul bagian kembali lurus di tengah */
+.showcase-title {
+  width: 100% !important;
+  text-align: center !important;
+  display: block !important;
+}
+
+
+/* ==========================================================================
+   FITUR PENCARIAN TIKTOK AFFILIATE (MODERN UI)
+   ========================================================================== */
+
+.affiliate-search-container {
+  max-width: 500px !important;
+  margin: 0 auto 3rem auto !important; /* Jarak ke deretan produk */
+  position: relative !important;
+}
+
+.search-box {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.search-icon {
+  position: absolute !important;
+  left: 20px !important;
+  width: 20px !important;
+  height: 20px !important;
+  color: var(--neon-cyan) !important; /* Kita ubah jadi warna neon agar lebih keren */
+  pointer-events: none !important; 
+  
+  /* INI KUNCINYA: Menarik ikon ke lapisan paling depan agar tidak tertutup efek blur */
+  z-index: 10 !important; 
+}
+
+#affiliateSearch {
+  width: 100% !important;
+  padding: 14px 20px 14px 50px !important; /* Ruang ekstra di kiri untuk ikon */
+  border-radius: 50px !important; /* Bentuk pil elegan */
+  border: 1px solid rgba(0, 255, 224, 0.2) !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: #ffffff !important;
+  font-family: inherit !important;
+  font-size: 0.95rem !important;
+  transition: all 0.3s ease !important;
+  outline: none !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+#affiliateSearch:focus {
+  border-color: var(--neon-cyan) !important;
+  box-shadow: 0 0 20px rgba(0, 255, 224, 0.15) !important;
+  background: rgba(0, 255, 224, 0.02) !important;
+}
+
+#affiliateSearch::placeholder {
+  color: #666666 !important;
+}
+
+/* ==========================================================================
+   PENYESUAIAN PENCARIAN UNTUK LIGHT MODE
+   ========================================================================== */
+
+[data-theme="light"] #affiliateSearch {
+  background: #FFFFFF !important;
+  border-color: rgba(45, 106, 79, 0.2) !important;
+  color: #1A2D23 !important;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03) !important;
+}
+
+[data-theme="light"] #affiliateSearch:focus {
+  border-color: #2D6A4F !important;
+  box-shadow: 0 5px 20px rgba(45, 106, 79, 0.1) !important;
+}
+
+[data-theme="light"] #affiliateSearch::placeholder {
+  color: #888888 !important;
+}
+
+[data-theme="light"] .search-icon {
+  color: #2D6A4F !important;
+}
+
+
